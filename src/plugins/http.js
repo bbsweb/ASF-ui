@@ -14,7 +14,7 @@ export class NotificationError extends Error {
 }
 
 const http = axios.create({
-  baseURL: (window.__BASE_PATH__) ? `${window.__BASE_PATH__}api` : '/api',
+  baseURL: storage.get('ipc-server') || '/api',
 });
 
 http.interceptors.request.use(config => {
@@ -109,6 +109,7 @@ export function botAction(bots, action, params) {
 export default {
   install(Vue) {
     Vue.prototype.$http = {
+      http,
       authenticate,
       get,
       post,

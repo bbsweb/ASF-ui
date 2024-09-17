@@ -32,8 +32,8 @@ module.exports = {
   output: {
     filename: 'scripts/[name].[contenthash:7].bundle.js',
     chunkFilename: 'scripts/[id].[contenthash:7].chunk.js',
-    path: path.resolve(__dirname, '../dist'),
-    publicPath: '/',
+    path: path.resolve(__dirname, '../../public/asf'),
+    publicPath: '/asf/',
     crossOriginLoading: 'anonymous',
   },
   module: {

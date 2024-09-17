@@ -11,7 +11,11 @@
 
       <p v-if="statusText" class="status-text" v-html="statusText"></p>
 
-      <div v-if="status === 'UNAUTHORIZED'" class="form-item">
+      <div v-if="status !== 'AUTHENTICATED'" class="form-item">
+        <div>
+          <label for="server" class="form-item__label">服务器</label>
+          <input id="server" v-model="server" class="form-item__input">
+        </div>
         <div class="form-item__code">
           <div>
             <label for="password" class="form-item__label">{{ $t('password') }}</label>
@@ -53,6 +57,7 @@
     },
     data() {
       return {
+        server: this.$store.getters['auth/server'],
         password: this.$store.getters['auth/password'],
         processing: false,
         countdown: 5,
@@ -140,18 +145,18 @@
         if (this.processing) return;
 
         switch (this.status) {
-          case STATUS.UNAUTHORIZED:
-            this.updatePassword();
-            break;
           case STATUS.AUTHENTICATED:
             this.redirect();
             break;
           default:
-            this.refreshStatus();
+            this.updatePassword();
         }
       },
       async updatePassword() {
         this.processing = true;
+        this.$http.http.defaults.baseURL = this.server;
+        if (this.server) storage.set('ipc-server', this.server);
+        else storage.remove('ipc-server');
 
         storage.remove('cache:authentication-required');
 
